@@ -1,7 +1,10 @@
 package com.danielagarcia.objectdetectiondemo.repository;
 
-import org.springframework.stereotype.Repository;
+import com.danielagarcia.objectdetectiondemo.model.Image;
 
-@Repository
-public class ImagesRepository {
+import java.util.List;
+
+public interface ImagesRepository {
+
+    public List<Image> getImages();
 }

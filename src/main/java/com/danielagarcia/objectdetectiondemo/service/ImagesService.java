@@ -1,7 +1,8 @@
 package com.danielagarcia.objectdetectiondemo.service;
 
-import org.springframework.stereotype.Service;
+import com.danielagarcia.objectdetectiondemo.model.ImageObject;
 
-@Service
-public class ImagesService {
+public interface ImagesService {
+
+    public ImageObject detectImageObjects();
 }
