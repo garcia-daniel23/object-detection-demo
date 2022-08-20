@@ -20,7 +20,7 @@ public class ImagesController {
     ImagesServiceImpl imagesService;
 
     @GetMapping(BASE_MAPPING)
-    public ArrayList<Image> getImages(@RequestParam(required = false) List<String> objects ) {
+    public ArrayList<Image> getImages(@RequestParam(required = false) List<String> objects) {
 
         return new ArrayList<Image>(Arrays.asList(new Image[]{new Image()}));
     }
@@ -28,6 +28,7 @@ public class ImagesController {
     @GetMapping(BASE_MAPPING + IMAGE_ID_MAPPING)
     public String getImageByID(@PathVariable String imageId) {
 
+        imagesService.detectImageObjects(imageId);
         return "This is the imageId: " + imageId;
     }
 
