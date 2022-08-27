@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -12,4 +14,5 @@ import lombok.Setter;
 public class ImageObject {
     private Integer objectId;
     private String name;
+    private List<Image> images;
 }

@@ -3,6 +3,7 @@ package com.danielagarcia.objectdetectiondemo.model;
 import com.danielagarcia.objectdetectiondemo.exception.ImageNotBase64StringException;
 import com.danielagarcia.objectdetectiondemo.exception.ImageURLAndDataException;
 import com.danielagarcia.objectdetectiondemo.validator.StringValidator;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @EqualsAndHashCode
 public class Image {
     private Integer imageId;

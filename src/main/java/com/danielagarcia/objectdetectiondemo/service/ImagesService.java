@@ -13,5 +13,5 @@ public interface ImagesService {
 
     public Image getImagesContainingObjects(List<ImageObject> objects);
 
-    public List<Image> getImages();
+    public List<Image> getImages(List<String> objects);
 }

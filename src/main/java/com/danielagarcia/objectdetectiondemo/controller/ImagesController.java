@@ -24,7 +24,7 @@ public class ImagesController {
     @GetMapping(BASE_MAPPING)
     public ResponseEntity<ArrayList<Image>> getImages(@RequestParam(required = false) List<String> objects) {
 
-        List<Image> allImages = imagesService.getImages();
+        List<Image> allImages = imagesService.getImages(objects);
 
         return new ResponseEntity(allImages, HttpStatus.OK);
     }
