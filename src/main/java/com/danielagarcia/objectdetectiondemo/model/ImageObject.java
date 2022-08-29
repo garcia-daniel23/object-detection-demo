@@ -14,5 +14,6 @@ import java.util.List;
 public class ImageObject {
     private Integer objectId;
     private String name;
+    private Float score;
     private List<Image> images;
 }

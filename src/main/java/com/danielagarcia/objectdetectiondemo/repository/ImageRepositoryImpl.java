@@ -70,8 +70,7 @@ public class ImageRepositoryImpl implements ImageRepository {
                     "i.\"label\" , " +
                     "i.detect_flg, " +
                     "i.image " +
-                    "from image i " +
-                    "inner join image_objects io on io.image_id = i.image_id";
+                    "from image i ";
 
     private static final String GET_IMAGE_BY_ID =
             "select i.image_id, " +

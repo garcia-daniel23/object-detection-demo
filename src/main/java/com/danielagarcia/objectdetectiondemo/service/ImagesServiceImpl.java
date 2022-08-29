@@ -60,13 +60,21 @@ public class ImagesServiceImpl implements ImagesService {
             return imageRepository.getImageById(Collections.singletonList(imageId)).get(FIRST_IN_LIST);
         }
 
-        List<ImageObject> detectedImageObjectList = googleVisionService.detectImageObjects(imageResource);
+        Map<String, Float> detectedObjectMap = googleVisionService.detectImageObjects(imageResource);
+
+
+        List<ImageObject> detectedImageObjectList = new ArrayList<>();
+        detectedObjectMap.keySet().forEach(label -> detectedImageObjectList.add(ImageObject.builder()
+                .name(label)
+                .build()));
+
         List<String> detectedImageObjectNames = detectedImageObjectList.stream()
                 .map(imageObject -> imageObject.getName())
                 .collect(Collectors.toList());
 
         imageObjectRepository.insertImageObject(detectedImageObjectList);
-        detectedImageObjectList = imageObjectRepository.getImageObjectByName(detectedImageObjectNames);
+
+        List<ImageObject> imageObjectList = imageObjectRepository.getImageObjectByName(detectedImageObjectNames);
 
         if (!detectedImageObjectNames.isEmpty() && imageToUpload.isEnable() && imageToUpload.getLabel().equals(NO_LABEL_DEFAULT)) {
             StringBuilder createdLabel = new StringBuilder();
@@ -77,20 +85,22 @@ public class ImagesServiceImpl implements ImagesService {
         }
 
         imageId = imageRepository.insertImage(imageToUpload);
+
         //Insert relationships
         List<ImageObjects> imageToObjectList = new ArrayList();
-        detectedImageObjectList.forEach(imageObject -> {
+        imageObjectList.forEach(imageObject -> {
             imageToObjectList.add(ImageObjects.builder()
                     .objectId(imageObject.getObjectId())
                     .imageId(imageId)
+                    .score(detectedObjectMap.get(imageObject.getName()))
                     .build());
 
         });
         imageObjectsRepository.insertImageObjects(imageToObjectList);
 
         List<Image> image = imageRepository.getImageById(Collections.singletonList(imageId));
-        image = attachObjectsToImages(image, detectedImageObjectList, imageToObjectList);
 
+        image = attachObjectsToImages(image, imageObjectList, imageToObjectList);
         return image.get(FIRST_IN_LIST);
     }
 
@@ -133,12 +143,15 @@ public class ImagesServiceImpl implements ImagesService {
             if (objectIds.isEmpty())
                 return new ArrayList<Image>();
 
+            //Call relationship table once for the images containing the object passed in
             imageToObjectList = imageObjectsRepository.getImageObjectsByObjectId(objectIds);
             imageIds = imageToObjectList.stream()
                     .map(imageToObject -> imageToObject.getImageId())
                     .collect(Collectors.toList());
+            //Make another query to get information on the objects in the images found
+            imageToObjectList = imageObjectsRepository.getImageObjectsByImageId(imageIds);
 
-            //Find the rest of the objects in the image
+            //Return all the objects in the images
             imageObjectList = imageObjectRepository.getImageObjectByJoiningImageId(imageIds);
 
             if (imageIds.isEmpty())
@@ -170,15 +183,16 @@ public class ImagesServiceImpl implements ImagesService {
                 .collect(Collectors.toMap(Image::getImageId, Function.identity()));
         Map<Integer, ImageObject> imageObjectMap = imageObjectList.stream()
                 .collect(Collectors.toMap(ImageObject::getObjectId, Function.identity()));
-
         imageToObjectList.forEach(imageToObject -> {
             Integer imageId = imageToObject.getImageId();
             Integer objectId = imageToObject.getObjectId();
+            Float score = imageToObject.getScore();
 
             try {
                 if (imageMap.get(imageId).getImageObjects() == null)
                     imageMap.get(imageId).setImageObjects(new ArrayList());
 
+                imageObjectMap.get(objectId).setScore(score);
                 imageMap.get(imageId).getImageObjects().add(imageObjectMap.get(objectId));
             } catch (NullPointerException ex) {
                 LOGGER.debug("Object or Image may not exist in table", ex);
