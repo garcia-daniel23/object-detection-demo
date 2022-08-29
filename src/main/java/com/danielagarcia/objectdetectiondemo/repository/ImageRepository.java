@@ -9,12 +9,8 @@ public interface ImageRepository {
 
     public List<Image> getImages();
 
+    public List<Image> getImageById(List<Integer> imageIds);
 
-    public List<Image> getImagesWithObject(List<ImageObject> objects);
-
-    public Image getImageById();
-
-
-    public Image insertImage(Image image);
+    public Integer insertImage(Image image);
 
 }

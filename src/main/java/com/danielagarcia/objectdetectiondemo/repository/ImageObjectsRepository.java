@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ImageObjectsRepository {
 
-    public List<ImageObjects> getImageObjectsByImageId(Integer imageId);
+    public List<ImageObjects> getImageObjectsByImageId(List<Integer> imageId);
 
-    public List<ImageObjects> getImageObjectsByObjectId(Integer imageId);
+    public List<ImageObjects> getImageObjectsByObjectId(List<Integer> objectId);
 
-    public void insertImageObjects(List<ImageObjects> imageObjects);
+    public int[] insertImageObjects(List<ImageObjects> imageObjects);
 }

@@ -20,16 +20,20 @@ public class Image {
     private String imageData;
     private String imageURL;
     private List<ImageObject> imageObjects;
-    private boolean enable;
+    private Boolean enable;
 
+    public boolean isEnable() {
+        return this.enable.booleanValue();
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
 
     public void hasErrors() {
-        if (!StringValidator.isBase64(this.imageData)) {
+        if (this.imageData != null && !StringValidator.isBase64(this.imageData))
             throw new ImageNotBase64StringException("imageData does not contain a Base64 encoded String");
-        }
-        if(this.imageData != null && !this.imageData.trim().isEmpty() && this.imageURL != null && !this.imageURL.trim().isEmpty()) {
-            throw new ImageURLAndDataException("imageData and imageURL can't both be present");
-        }
-
+        if ((this.imageData == null || this.imageData.trim().isEmpty()) && (this.imageURL == null || this.imageURL.trim().isEmpty()))
+            throw new ImageURLAndDataException("imageData and imageUrl can't both be null");
     }
 }

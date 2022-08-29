@@ -6,7 +6,12 @@ import java.util.List;
 
 public interface ImageObjectRepository {
 
-    public List<ImageObject> getImageObjectByObjectId(Integer objectId);
-    public List<ImageObject> getImageObjectByName(String name);
+    public List<ImageObject> getImageObjectByObjectId(List<Integer> objectId);
+
+    public List<ImageObject> getImageObjectByJoiningImageId(List<Integer> imageId);
+
+    public List<ImageObject> getImageObjectByName(List<String> name);
+
+    public int[] insertImageObject(List<ImageObject> imageObject);
 
     }
