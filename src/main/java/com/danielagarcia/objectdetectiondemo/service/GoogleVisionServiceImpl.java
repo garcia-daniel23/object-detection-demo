@@ -23,7 +23,7 @@ public class GoogleVisionServiceImpl {
     @Autowired
     private CloudVisionTemplate cloudVisionTemplate;
 
-    public List<ImageObject > detectImageObjects(Resource image) throws HttpMediaTypeNotSupportedException {
+    public Map<String, Float> detectImageObjects(Resource image) throws HttpMediaTypeNotSupportedException {
         if (image == null)
             throw new RuntimeException("Image Resource is null");
         // [START spring_vision_image_labelling]
@@ -48,10 +48,7 @@ public class GoogleVisionServiceImpl {
         // [END spring_vision_image_labelling]
 
         List<ImageObject> imageObjectList = new ArrayList();
-        imageLabels.keySet().forEach(label -> imageObjectList.add(ImageObject.builder()
-                        .name(label)
-                .build()));
 
-        return imageObjectList;
+        return imageLabels;
     }
 }

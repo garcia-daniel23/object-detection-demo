@@ -13,4 +13,5 @@ import lombok.Setter;
 public class ImageObjects {
     private Integer imageId;
     private Integer objectId;
+    private Float score;
 }
